@@ -27,6 +27,9 @@ int global_sum(int my_int /* in */, int my_rank /* in */, int comm_sz /* in */,
   int other_sum = 0;
   MPI_Status status;
 
+  if (comm_sz <= 0 || my_rank < 0 || my_rank >= comm_sz)
+    return 0;
+
   if(my_rank % 2 !=0 && my_rank > 0){
     Send (&my_sum, 1, MPI_INT, my_rank -1, 0, comm);
   }

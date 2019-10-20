@@ -243,6 +243,13 @@ int allocate_space(double **local_A, double **local_x, double **local_d,
  *
  * Global variable: This function should NOT use any global variable
  */
+
+/*
+Block mapping functions
+procmap(i, r) ((int)floor((double)i / r))
+local(i, r) (i % r)
+*/
+
 int init_matrix(double *local_A, double *local_x, double *local_d,
                 double *local_y, int blocksize, int n, int matrix_type,
                 int my_rank) {
@@ -250,7 +257,16 @@ int init_matrix(double *local_A, double *local_x, double *local_d,
       local_y == NULL || blocksize <= 0)
     return FAIL;
 
-  /* Your solution */
+  for(int i = 0; i < n; i++){
+    d[i] = (2 * i - 1) / i;           // Under Construction!!!
+  }
+
+  if(matrix_type != UPPER_TRIANGULAR){
+
+  }else{
+
+  }
+
   return SUCC;
 }
 
