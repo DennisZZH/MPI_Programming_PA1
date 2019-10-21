@@ -257,13 +257,38 @@ int init_matrix(double *local_A, double *local_x, double *local_d,
       local_y == NULL || blocksize <= 0)
     return FAIL;
 
-  for(int i = 0; i < n; i++){
-    d[i] = (2 * i - 1) / i;           // Under Construction!!!
+  for(int i = 0; i < blocksize; i++){
+    local_x[i] = 0;
+    local_d[i] = (2 * n - 1) / n;
   }
 
   if(matrix_type != UPPER_TRIANGULAR){
 
+    for(int i = 0; i < n; i++){
+      if(procmap(i, blocksize) == my_rank){
+        for(int j = 0; j < n; j++){
+          if(i == j){
+            local_A[local(i, blocksize) * n + j] = 0;
+          }else{
+            local_A[local(i, blocksize) * n + j] = -1 / n;
+          }
+        }
+      }
+    }
+
   }else{
+    
+    for(int i = 0; i < n; i++){
+      if(procmap(i, blocksize) == my_rank){
+        for(int j = 0; j < n; j++){
+          if(i >= j){
+            local_A[local(i, blocksize) * n + j] = 0;
+          }else{
+            local_A[local(i, blocksize) * n + j] = -1 / n;
+          }
+        }
+      }
+    }
 
   }
 

@@ -97,9 +97,9 @@ int itmv_mult(double local_A[] /* in */, double local_x[] /* in */,
     
     /* {y=d+Ax; x=y} */
     for (local_i = 0; local_i < blocksize; local_i++) {
-      local_y[local_i] = d[i];
+      local_y[local_i] = local_d[local_i];
       if (matrix_type == UPPER_TRIANGULAR) {
-        start = i;
+        start = local_i;
       } else {
         start = 0;
       }
