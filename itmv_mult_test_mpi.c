@@ -259,7 +259,7 @@ int init_matrix(double *local_A, double *local_x, double *local_d,
 
   for(int i = 0; i < blocksize; i++){
     local_x[i] = 0;
-    local_d[i] = (2 * n - 1) / n;
+    local_d[i] = (2 * n - 1) / (double) n;
   }
 
   if(matrix_type != UPPER_TRIANGULAR){
@@ -270,7 +270,7 @@ int init_matrix(double *local_A, double *local_x, double *local_d,
           if(i == j){
             local_A[local(i, blocksize) * n + j] = 0;
           }else{
-            local_A[local(i, blocksize) * n + j] = -1 / n;
+            local_A[local(i, blocksize) * n + j] = -1 / (double) n;
           }
         }
       }
@@ -284,7 +284,7 @@ int init_matrix(double *local_A, double *local_x, double *local_d,
           if(i >= j){
             local_A[local(i, blocksize) * n + j] = 0;
           }else{
-            local_A[local(i, blocksize) * n + j] = -1 / n;
+            local_A[local(i, blocksize) * n + j] = -1 / (double) n;
           }
         }
       }
