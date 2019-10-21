@@ -85,7 +85,31 @@ int itmv_mult(double local_A[] /* in */, double local_x[] /* in */,
   if (n / no_proc != blocksize) /* wrong local array size */
     return 0;
 
-  /* Your solution */
+  /* checking if the allocation of local memory space is successful in ALL processes, then continue */
+  x = malloc(n * sizeof(double));
+  succ = x != NULL;
+  MPI_Allreduce(&succ, &all_succ, 1, MPI_INT, MPI_PROD, comm);
+  if (all_succ == 0) return 0;
+
+  for(int k = 0; k < t; k++){
+    /* gather local x to get x vector */
+     MPI_Allgather(local_x, blocksize, MPI_DOUBLE, x, blocksize, MPI_DOUBLE, comm);
+    
+    /* {y=d+Ax; x=y} */
+    for (local_i = 0; local_i < blocksize; local_i++) {
+      local_y[local_i] = local_d[local_i];
+      if (matrix_type == UPPER_TRIANGULAR) {
+        start = local_i;
+      } else {
+        start = 0;
+      }
+      for (j = start; j < n; j++) local_y[local_i] += local_A[local_i * n + j] * x[j];
+      local_x[local_i] = local_y[local_i];
+    }
+  }
+
+  /* Store the final vector x in process 0 when returning */
+  MPI_Gather(local_x, blocksize, MPI_DOUBLE, global_x, blocksize, MPI_DOUBLE, 0, comm);  
 
   return 1;
 }

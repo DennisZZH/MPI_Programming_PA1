@@ -28,13 +28,24 @@ int global_sum(int my_int, int my_rank, int no_proc, MPI_Comm comm);
  */
 char *treesum_test1() {
   /* Your solution */
-  return "Not tested";
+  int result = global_sum(1,my_rank,no_proc,comm);
+  if(result != no_proc) return "Test1: Result not correct!";
+
+  return NULL;
+}
+
+char *treesum_test2() {
+  /* Your solution */
+  int result = global_sum(my_rank,my_rank,no_proc,comm);
+  if(result != ( (no_proc - 1) * no_proc / 2 )) return "Test2: Result not correct!";
+  
+  return NULL;
 }
 
 /*-------------------------------------------------------------------
  * Run all tests.  Ignore returned messages.
  */
-void run_all_tests(void) { mu_run_test(treesum_test1); }
+void run_all_tests(void) { mu_run_test(treesum_test1);mu_run_test(treesum_test2); }
 
 /*-------------------------------------------------------------------
  * The main entrance to run all tests.

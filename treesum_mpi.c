@@ -27,15 +27,18 @@ int global_sum(int my_int /* in */, int my_rank /* in */, int comm_sz /* in */,
   int other_sum = 0;
   MPI_Status status;
 
+  if (comm_sz <= 0 || my_rank < 0 || my_rank >= comm_sz)
+    return 0;
+
   if(my_rank % 2 !=0 && my_rank > 0){
-    Send (&my_sum, 1, MPI_INT, my_rank -1, 0, comm);
+    MPI_Send (&my_sum, 1, MPI_INT, my_rank -1, 0, comm);
   }
   for( int gap = 1; gap < comm_sz; gap = gap * 2){
     if(my_rank % (2 * gap) == 0 && my_rank + gap < comm_sz ){
-      Receive(&other_sum, 1, MPI_INT, my_rank + gap, 0, comm, &status);
+      MPI_Recv(&other_sum, 1, MPI_INT, my_rank + gap, 0, comm, &status);
       my_sum= other_sum + my_sum;
       if((my_rank % (4 * gap)) != 0 && my_rank >= 2 * gap)
-        Send (&my_sum, 1, MPI_INT,  my_rank - 2 * gap, 0, comm);
+        MPI_Send (&my_sum, 1, MPI_INT,  my_rank - 2 * gap, 0, comm);
     }
   }
 
