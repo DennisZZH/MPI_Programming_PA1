@@ -30,11 +30,12 @@ double parallel_pi(long long int number_of_tosses, int my_rank, int no_proc,
   long long int number_in_circle = 0;
   long long int total_in_circle = 0;
   long long int iteration = number_of_tosses / no_proc;
+  long long int i;
 
   if (no_proc <= 0 || my_rank < 0 || my_rank >= no_proc || number_of_tosses < 0)
     return 0;
 
-  for (long long int i = 0; i < iteration; i++) {
+  for (i = 0; i < iteration; i++) {
     x = 2 * random() / ((double)RAND_MAX) - 1.0;
     y = 2 * random() / ((double)RAND_MAX) - 1.0;
     distance_squared = x * x + y * y;
