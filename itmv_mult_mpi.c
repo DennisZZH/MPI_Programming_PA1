@@ -99,7 +99,7 @@ int itmv_mult(double local_A[] /* in */, double local_x[] /* in */,
     for (local_i = 0; local_i < blocksize; local_i++) {
       local_y[local_i] = local_d[local_i];
       if (matrix_type == UPPER_TRIANGULAR) {
-        start = local_i;
+        start = my_rank * blocksize + local_i;
       } else {
         start = 0;
       }
@@ -110,6 +110,7 @@ int itmv_mult(double local_A[] /* in */, double local_x[] /* in */,
 
   /* Store the final vector x in process 0 when returning */
   MPI_Gather(local_x, blocksize, MPI_DOUBLE, global_x, blocksize, MPI_DOUBLE, 0, comm);  
+  free(x);
 
   return 1;
 }
